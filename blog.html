@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DharaCare 🌍 — Blog</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-bg">
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="earth-glow"></div>
+  </div>
+  <div class="header-content">
+    <div class="logo-wrap">
+      <span class="logo-icon">🌍</span>
+      <h1><span class="dhara">Dhara</span><span class="care">Care</span></h1>
+    </div>
+    <p class="page-subtitle">✍️ Adya's Earth Diary</p>
+  </div>
+</header>
+
+<div class="wave">
+  <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="height:60px;width:100%;">
+    <path fill="#40916c" d="M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,0 L0,0 Z"/>
+    <path fill="#2d6a4f" d="M0,20 C360,50 720,0 1080,30 C1260,45 1380,10 1440,20 L1440,0 L0,0 Z" opacity="0.4"/>
+  </svg>
+</div>
+
+<nav>
+  <a href="index.html">🏠 Home</a>
+  <a href="blog.html" class="active">✍️ Blog</a>
+  <a href="about.html">🙋 About Me</a>
+</nav>
+
+<section>
+  <div class="blog-wrap">
+    <div class="blog-header-row">
+      <div>
+        <p class="section-title" style="margin-bottom:0.3rem;">✍️ My Earth Diary</p>
+        <p class="section-sub" style="margin-bottom:0;">My stories, thoughts &amp; adventures in saving our planet!</p>
+      </div>
+      <button class="write-btn" onclick="toggleForm()">✏️ Write New Post</button>
+    </div>
+
+    <!-- WRITE FORM -->
+    <div class="blog-form" id="blogForm">
+      <div class="form-row">
+        <input type="text" id="postTitle" placeholder="✨ Give your post a title..." maxlength="100" />
+        <select id="postTag">
+          <option value="🌱 Planting">🌱 Planting</option>
+          <option value="💧 Water">💧 Water</option>
+          <option value="♻️ Recycling">♻️ Recycling</option>
+          <option value="🐾 Wildlife">🐾 Wildlife</option>
+          <option value="🌞 Energy">🌞 Energy</option>
+          <option value="🚶 Travel">🚶 Travel</option>
+          <option value="🥗 Food">🥗 Food</option>
+          <option value="💡 Learning">💡 Learning</option>
+          <option value="🌍 Other">🌍 Other</option>
+        </select>
+      </div>
+      <textarea id="postBody" placeholder="Write about what you did, how it felt, and why it matters to you... 💚"></textarea>
+      <div class="form-btns">
+        <button class="btn-cancel" onclick="toggleForm()">Cancel</button>
+        <button class="btn-post" onclick="publishPost()">🌿 Publish Post</button>
+      </div>
+    </div>
+
+    <!-- POSTS -->
+    <div class="blog-posts" id="blogPosts"></div>
+  </div>
+</section>
+
+<footer>
+  <p>Made with <span class="heart">💛</span> and a lot of green love by <strong>Adya Srivastava</strong></p>
+  <p style="margin-top:6px;">🌍 <a href="https://dharacare.in">dharacare.in</a></p>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="about.html">About Me</a>
+  </nav>
+  <p style="margin-top:10px;font-size:0.8rem;opacity:0.5;">Dhara (धरा) = Earth 🌱</p>
+</footer>
+
+<script>
+  const STORAGE_KEY = 'dharacare_blog_posts';
+
+  const samplePosts = [
+    {
+      id: 1,
+      title: "I planted my first sapling today! 🌱",
+      tag: "🌱 Planting",
+      body: "Today was such a special day! My dad helped me plant a neem sapling in our building compound. The soil was so soft and it felt amazing to tuck the little plant in and water it gently. I've named her 'Nimbi'! I'm going to water her every morning and watch her grow. I hope she gives shade to so many people one day. Every big tree starts as a tiny sapling — and so does every big change. 🌍",
+      date: "15 March 2025"
+    },
+    {
+      id: 2,
+      title: "My first waste segregation drive! ♻️",
+      tag: "♻️ Recycling",
+      body: "I participated in a waste segregation drive in my neighbourhood for the first time and it was such an eye-opener! Most people didn't even know the difference between wet and dry waste. I got to explain it to so many aunties and uncles and it felt SO good when they said they'd start doing it at home. One person asked me — 'You're just a child, why do you care so much?' And I said — 'Because it's my Earth too!' 💚",
+      date: "2 February 2025"
+    },
+    {
+      id: 3,
+      title: "Started a compost bin at home! 🪴",
+      tag: "♻️ Recycling",
+      body: "I convinced my mum to start composting our kitchen waste! We got a small pot and started putting vegetable peels, fruit scraps and leftover food into it. In about 3 weeks, it turned into dark rich soil which we used for our terrace garden. My mum was so surprised! Now she tells all her friends about it too. Composting is so easy and it means less garbage going into landfills. I feel so proud every time I look at our little compost pot. 🪴",
+      date: "10 January 2025"
+    }
+  ];
+
+  function loadPosts() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? JSON.parse(saved) : samplePosts;
+    } catch(e) { return samplePosts; }
+  }
+
+  function savePosts(posts) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(posts)); } catch(e) {}
+  }
+
+  function formatDate(d) {
+    return new Date(d).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+  }
+
+  function renderPosts() {
+    const posts = loadPosts();
+    const container = document.getElementById('blogPosts');
+    if (!posts.length) {
+      container.innerHTML = `<div class="no-posts"><span class="no-icon">🌿</span>No posts yet — write your first Earth story!</div>`;
+      return;
+    }
+    container.innerHTML = posts.slice().reverse().map(p => `
+      <div class="blog-post" id="post-${p.id}">
+        <button class="post-delete" onclick="deletePost(${p.id})" title="Delete post">🗑️</button>
+        <span class="post-tag">${p.tag}</span>
+        <div class="post-title">${p.title}</div>
+        <div class="post-date">📅 ${p.date}</div>
+        <div class="post-body">${p.body.replace(/\n/g,'<br>')}</div>
+      </div>
+    `).join('');
+  }
+
+  function toggleForm() {
+    const form = document.getElementById('blogForm');
+    form.classList.toggle('open');
+    if (form.classList.contains('open')) document.getElementById('postTitle').focus();
+  }
+
+  function publishPost() {
+    const title = document.getElementById('postTitle').value.trim();
+    const body  = document.getElementById('postBody').value.trim();
+    const tag   = document.getElementById('postTag').value;
+    if (!title) { alert('Please give your post a title! 🌱'); return; }
+    if (!body)  { alert('Please write something in your post! ✍️'); return; }
+    const posts = loadPosts();
+    posts.push({ id: Date.now(), title, tag, body, date: formatDate(new Date()) });
+    savePosts(posts);
+    document.getElementById('postTitle').value = '';
+    document.getElementById('postBody').value = '';
+    document.getElementById('blogForm').classList.remove('open');
+    renderPosts();
+    document.getElementById('blogPosts').firstElementChild?.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  function deletePost(id) {
+    if (!confirm('Delete this post? 🗑️')) return;
+    savePosts(loadPosts().filter(p => p.id !== id));
+    renderPosts();
+  }
+
+  renderPosts();
+</script>
+
+</body>
+</html>
